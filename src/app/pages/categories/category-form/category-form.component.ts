@@ -93,7 +93,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
         this.category = category;
         this.categoryForm.patchValue(this.category);
       },
-      error => alert('Oorreu um erro no servidor, tente mais tarde!'));
+      error => alert('Orreu um erro no servidor, tente mais tarde!'));
     }
   }
 
