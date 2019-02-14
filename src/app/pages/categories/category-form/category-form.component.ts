@@ -19,7 +19,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   serverErrorMessages: string[] = null;
   // tslint:disable-next-line:no-inferrable-types
   submittingForm: boolean = false;
-  category: Category = null;
+  category: Category = new Category();
 
   constructor(
     private categoryService: CategoryService,
@@ -34,23 +34,57 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.loadcategory();
   }
 
-  setCurrentAction(): any {
-    if (this.route.snapshot.url[0].path === 'new'){
+  ngAfterContentChecked(): void {
+    this.setPageTitle();
+  }
+
+  submitForm() {
+    this.submittingForm = true;
+    if (this.currentAction == 'new') {
+      this.createCategory();
+    } else {
+      this.updateCategory();
+    }
+  }
+
+  // PRIVATE METHODS
+
+  private createCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+
+    this.categoryService.create(category)
+      .subscribe(
+        response => this.actionsForSuccess(response),
+        error => this.actionsForError(error)
+      );
+  }
+
+  private updateCategory(): any {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.update(category)
+    .subscribe(
+      response => this.actionsForSuccess(response),
+      error => this.actionsForError(error)
+    );
+  }
+
+  private buildCategoryForm() {
+    this.categoryForm = this.formBuilder.group({
+      id: [null],
+      name: [null, [Validators.required, Validators.minLength(2)]],
+      description: [null]
+    });
+  }
+
+  private setCurrentAction(): any {
+    if (this.route.snapshot.url[0].path === 'new') {
       this.currentAction = 'new';
     } else {
       this.currentAction = 'edit';
     }
   }
 
-  private buildCategoryForm() {
-    this.categoryForm = this.formBuilder.group({
-      id: [null],
-      name: [null, [Validators.minLength(2)]],
-      description: [null]
-    });
-  }
-
-  loadcategory() {
+  private loadcategory() {
     if (this.currentAction == 'edit') {
       this.route.paramMap.pipe(
         switchMap(params => this.categoryService.getById(+params.get('id')))
@@ -63,7 +97,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  setPageTitle() {
+  private setPageTitle() {
     if (this.currentAction == 'new') {
       this.pageTitle = 'Cadastro de Nova Categoria';
     } else {
@@ -72,10 +106,26 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  ngAfterContentChecked(): void {
-    this.setPageTitle();
+
+  private actionsForError(error: any): void {
+    toastr.error("Ocorreu um erro ao preencher o formulário!");
+
+    this.submittingForm = false;
+
+    if (error.status === 422) {
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+    } else {
+      this.serverErrorMessages = ["Falha na comunicação com o servidor. Por favor tente mais tarde."];
+    }
   }
 
 
+  private actionsForSuccess(category: Category): void {
+    toastr.success("Solicitação processada com sucesso!");
 
+    // redireciona para uma pagina e em seguida para outra
+    this.router.navigateByUrl("categories",{ skipLocationChange: true }).then(
+      () => this.router.navigate(["categories",category.id,"edit"])
+    );
+  }
 }
