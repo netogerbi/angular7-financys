@@ -55,6 +55,7 @@ export class EntryService {
   // PRIVATE METHODS
 
   private JsonDataToEntries(jsonData: any): Entry[] {
+    console.log(jsonData);
     const entries: Entry[] = [];
     jsonData.forEach(element => entries.push(element as Entry));
     return entries;
