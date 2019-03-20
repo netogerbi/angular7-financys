@@ -2,7 +2,7 @@ import { EntryService } from './../shared/entry.service';
 import { ActivatedRoute, Routes, Router } from '@angular/router';
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, first } from 'rxjs/operators';
 import toastr from 'toastr';
 import { Entry } from '../shared/entry.model';
 
@@ -20,6 +20,30 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   // tslint:disable-next-line:no-inferrable-types
   submittingForm: boolean = false;
   entry: Entry = new Entry();
+
+  imaskConfig = {
+    mask: Number,
+    scale: 2,
+    thousandSeparator: '',
+    padFractionalZeros: true,
+    normaLizeZeros: true,
+    radix: ','
+  };
+
+  ptBr = {
+    firstDayOfWeek: 0,
+    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+    dayNamesMin: ['Do', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+    monthNames: [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ],
+    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+    'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    today: 'Hoje',
+    clear: 'Limpar'
+}
 
   constructor(
     private entryService: EntryService,
