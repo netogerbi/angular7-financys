@@ -1,3 +1,5 @@
+import { CategoryService } from './../../categories/shared/category.service';
+import { Category } from './../../categories/shared/category.model';
 import { EntryService } from './../shared/entry.service';
 import { ActivatedRoute, Routes, Router } from '@angular/router';
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
@@ -20,6 +22,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   // tslint:disable-next-line:no-inferrable-types
   submittingForm: boolean = false;
   entry: Entry = new Entry();
+  categories: Category[];
 
   imaskConfig = {
     mask: Number,
@@ -47,6 +50,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   constructor(
     private entryService: EntryService,
+    private categoryService: CategoryService,
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder
@@ -56,6 +60,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     this.setCurrentAction();
     this.buildEntryForm();
     this.loadentry();
+    this.loadCategories();
   }
 
   ngAfterContentChecked(): void {
@@ -69,6 +74,16 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     } else {
       this.updateEntry();
     }
+  }
+
+  get TypeOptions(): Array<any> {
+    return Object.entries(Entry.types).map(
+      ([value, text]) => {
+        return {
+          text: text,
+          value: value
+        };
+    });
   }
 
   // PRIVATE METHODS
@@ -97,10 +112,10 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       id: [null],
       name: [null, [Validators.required, Validators.minLength(2)]],
       description: [null],
-      type: [null, [Validators.required]],
+      type: ['expense', [Validators.required]],
       amount: [null, [Validators.required]],
       date: [null, [Validators.required]],
-      paid: [null, [Validators.required]],
+      paid: [true, [Validators.required]],
       categoryId: [null, [Validators.required]]
     });
   }
@@ -124,6 +139,12 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       },
       error => alert('Orreu um erro no servidor, tente mais tarde!'));
     }
+  }
+
+  private loadCategories() {
+    this.categoryService.getAll().subscribe(
+      categories => this.categories = categories
+    );
   }
 
   private setPageTitle() {
