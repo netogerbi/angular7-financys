@@ -1,0 +1,2 @@
+Tudo o que precisa no sistema inteiro e ser obrigatório pro sistema rodar deve ficar na pasta core.
+Deve ser importado no app.component.ts

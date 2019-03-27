@@ -1,0 +1,2 @@
+Componentes repetidos no sistema que nao são de utilização obrigatório para o funcionamento do sistema devem ficar na pasta shared.
+Deve ser importado nos componentes que se queira inserir algum modulo compartilhado da pasta shared.
