@@ -19,7 +19,7 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     return this.http.get(this.apiPath).pipe(
       catchError(this.handleError),
       map(this.jsonDataToResources)
-    )
+    );
   }
 
   getById(id: number): Observable<T> {
@@ -28,14 +28,14 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     return this.http.get(url).pipe(
       catchError(this.handleError),
       map(this.jsonDataToResource)
-    )
+    );
   }
 
   create(resource: T): Observable<T> {
     return this.http.post(this.apiPath, resource).pipe(
       catchError(this.handleError),
       map(this.jsonDataToResource)
-    )
+    );
   }
 
   update(resource: T): Observable<T> {
@@ -44,7 +44,7 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     return this.http.put(url, resource).pipe(
       catchError(this.handleError),
       map(() => resource)
-    )
+    );
   }
 
   delete(id: number): Observable<any> {
@@ -53,7 +53,7 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     return this.http.delete(url).pipe(
       catchError(this.handleError),
       map(() => null)
-    )
+    );
   }
 
   // PROTECTED METHODS
