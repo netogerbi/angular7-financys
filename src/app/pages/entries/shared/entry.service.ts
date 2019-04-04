@@ -1,11 +1,9 @@
-import { flatMap, catchError, map } from 'rxjs/operators';
+import { flatMap} from 'rxjs/operators';
 import { Injector, Injectable } from '@angular/core';
 import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
 import { CategoryService } from './../../categories/shared/category.service';
 import { Entry } from './entry.model';
 import { Observable } from 'rxjs';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -20,32 +18,21 @@ export class EntryService extends BaseResourceService<Entry> {
     return this.categoriService.getById(entry.categoryId).pipe(
       flatMap( category => { // flatMap tem acesso ao objeto do observable
         entry.category = category;
-
-        return this.http.post(this.apiPath, entry).pipe(
-          catchError(this.handleError),
-          map(this.jsonDataToResource)
-        );
+          return super.create(entry);
       })
     );
   }
 
   update(entry: Entry): Observable<Entry> {
-    const url = `${this.apiPath}/${entry.id}`;
-
     return this.categoriService.getById(entry.categoryId).pipe(
       flatMap(category => {
         entry.category = category;
-
-        return this.http.put(url, entry).pipe(
-          catchError(this.handleError),
-          map(() => entry)
-        );
+          return super.update(entry);
       })
     );
   }
 
   // PROTECTED METHODS
-
   protected jsonDataToResources(jsonData: any): Entry[] {
     const entries: Entry[] = [];
     jsonData.forEach(element => entries.push(Object.assign(new Entry(), element)));
