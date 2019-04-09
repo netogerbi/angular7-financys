@@ -119,7 +119,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-
   private actionsForSuccess(category: Category): void {
     toastr.success("Solicitação processada com sucesso!");
 
