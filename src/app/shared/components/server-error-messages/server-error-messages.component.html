@@ -1,0 +1,7 @@
+
+  <div class="alert alert-danger mt-4" *ngIf="serverErrorMessages">
+    <strong>Erro no servidor:</strong>
+    <ul>
+      <li *ngFor="let item of serverErrorMessages" >{{ item }}</li>
+    </ul>
+  </div>
