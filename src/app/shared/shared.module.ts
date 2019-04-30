@@ -8,7 +8,12 @@ import { FormFieldErrorComponent } from './components/form-field-error/form-fiel
 import { ServerErrorMessagesComponent } from './components/server-error-messages/server-error-messages.component';
 
 @NgModule({
-  declarations: [BreadCrumbComponent, PageHeaderComponent, FormFieldErrorComponent, ServerErrorMessagesComponent],
+  declarations: [
+    BreadCrumbComponent,
+    PageHeaderComponent,
+    FormFieldErrorComponent,
+    ServerErrorMessagesComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
